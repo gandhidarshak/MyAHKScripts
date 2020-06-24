@@ -51,15 +51,15 @@ ChangeSkypeMode(mode)
    return
 }
 
-!a::  ; Skype Available
-   ChangeSkypeMode("v")
+!a::  ; Skype Reset the status - Available
+   ChangeSkypeMode("t")
    return
 
-!b::  ; Skype DND
+!b::  ; Skype DND - Busy
    ChangeSkypeMode("d")
    return
 
-!o::  ;  Skype offline
+!c::  ;  Skype offline - Cut off
    ChangeSkypeMode("f")
    return
 return

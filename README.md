@@ -13,9 +13,9 @@ Below bind-keys will be readily available once you run the Bindkeys.ahk file.  F
       Alt+p        : Using full page screen capture plugin of chrome, save PDF version of current web-page as it's displayed on chrome right now.
       Shift+Ctrl+v : Sends clipboard content through keyboard typing. Very useful for remote-screens when copy is not working fine.
       Shift        : Pressing shift will almost constrain mouse to a horizontal movement like it happens in ms-paint for all other applications
-      Alt+a        : Change Skype status to Available
-      Alt+b        : Change Skype status to DND
-      Alt+o        : Change Skype status to offline
+      Alt+a        : Reset Skype status - Available
+      Alt+b        : Change Skype status to DND - Busy
+      Alt+c        : Change Skype status to offline - Cut-off
       Alt+d        : Sends curent DATE in DDMMYYYY Format through keyboard.
       Alt+t        : Sends time and date stamp YYMMDDhhmmss through keyboard.
       Win+d        : For my personal use, converts some linux paths to windows mapping in my system
