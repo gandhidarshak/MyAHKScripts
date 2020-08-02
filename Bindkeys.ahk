@@ -164,6 +164,9 @@ FileNameFromTitle(winTitle)
    WinWait, Snipping Tool, 
    IfWinNotActive, Snipping Tool, , WinActivate, Snipping Tool, 
    WinWaitActive, Snipping Tool, 
+   sleep, 300
+   Send, {CTRLDOWN}c{CTRLUP}
+   sleep, 300
    Send, {ALTDOWN}f{ALTUP}
    sleep 300
    Send, x
@@ -268,6 +271,7 @@ FullPageScreenShot:
    Sleep 300
    SendInput {Ctrl Up}
    Sleep 1000
+   Clipboard = %folderPath%\%fileCount%_%fileName%.pdf
 return
 
 RunCmd(cmd)		;executes javascript in url bar
