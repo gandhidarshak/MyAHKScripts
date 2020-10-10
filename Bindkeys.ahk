@@ -98,6 +98,10 @@ return
 	StringReplace, clipboard, clipboard, /wrk/xcohdnobkup2/darshakk, T:, All
 	;XSJ Staff nobkup
 	StringReplace, clipboard, clipboard, /wrk/xsjhdnobkup1/darshakk, Q:, All
+	; XCO Dese Dir
+	StringReplace, clipboard, clipboard, /wrk/dese1/darshakk, S:, All
+	StringReplace, clipboard, clipboard, /proj/dese/users/darshakk, S:, All
+
 	StringReplace, clipboard, clipboard, /, \, All
 return
 
