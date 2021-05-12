@@ -12,6 +12,51 @@
 													
 ;***************************Key Control Shortcuts*************************
 
+;  Rename XPP to PDM
+;  ^+p::
+;  send {CTRLDOWN}a{CTRLUP}
+;  send {CTRLDOWN}c{CTRLUP}
+;  StringReplace, clipboard, clipboard,  XPP, PDM, All
+;  StringReplace, clipboard, clipboard,  Xilinx Power Planner, Power Design Manager, All
+;  send {CTRLDOWN}v{CTRLUP}
+;  sleep 500
+;  send {TAB}
+;  sleep 1000
+;  send {CTRLDOWN}f{CTRLUP}
+;  sleep 1000
+;  send XPP
+;  send {TAB}
+;  sleep 1000
+;  send PDM
+;  send {TAB}
+;  sleep 100
+;  send {TAB}
+;  sleep 100
+;  send {TAB}
+;  sleep 100
+;  send {SPACE}
+;  sleep 2000
+;  send {CTRLDOWN}f{CTRLUP}
+;  sleep 1000
+;  send {BACKSPACE}{BACKSPACE}{BACKSPACE}
+;  send Xilinx Power Planner
+;  send {TAB}
+;  sleep 1000
+;  send Power Design Manager
+;  send {TAB}
+;  sleep 300
+;  send {TAB}
+;  sleep 300
+;  send {TAB}
+;  sleep 300
+;  send {TAB}
+;  sleep 300
+;  send {SPACE}
+;  sleep 1000
+;  return
+
+
+
 $*Shift:: ; Pressing shift will almost constrain mouse to a horizontal movement
 Send {Shift Down}
 MouseGetPos, ox, oy
@@ -37,35 +82,61 @@ send %ClipBoard%
 sendMode Event
 return
 
-;***************************Skype shortcuts******************************
-ChangeSkypeMode(mode)
-{
-   IfWinNotActive, Skype for Business, , WinActivate, Skype for Business, 
-   WinWaitActive, Skype for Business, 
-   Send, {ALTDOWN}f{ALTUP}
-   sleep 100
-   Send m
-   Sleep 500
-   Send %mode%
-   Sleep 100
-   return
-}
+;**************** Skype shortcuts - My org doesn't use Skype anymore *************
+;   ChangeSkypeMode(mode)
+;   {
+;      IfWinNotActive, Skype for Business, , WinActivate, Skype for Business, 
+;      WinWaitActive, Skype for Business, 
+;      Send, {ALTDOWN}f{ALTUP}
+;      sleep 100
+;      Send m
+;      Sleep 500
+;      Send %mode%
+;      Sleep 100
+;      return
+;   }
+;   
+;   !a::  ; Skype Reset the status - Available
+;      ChangeSkypeMode("t")
+;      return
+;   
+;   !b::  ; Skype DND - Busy
+;      ChangeSkypeMode("d")
+;      return
+;   
+;   !c::  ;  Skype offline - Cut off
+;      ChangeSkypeMode("f")
+;      return
+;   return
 
-!a::  ; Skype Reset the status - Available
-   ChangeSkypeMode("t")
-   return
+; ************ Slack Short-cuts ***************
 
-!b::  ; Skype DND - Busy
-   ChangeSkypeMode("d")
-   return
-
-!c::  ;  Skype offline - Cut off
-   ChangeSkypeMode("f")
-   return
-return
 
 ;****************************Application shortcuts**************************
 
+GetWeblink()
+{
+	sleep, 100
+	send, {F6}
+	sleep, 500
+   Send, {CTRLDOWN}c{CTRLUP}
+   sleep, 500
+   Send, {ENTER}
+   sleep, 1000
+	return, %clipboard%
+	
+}
+GetDateTime()
+{
+	FormatTime, var_d , , dd
+	FormatTime, var_M , , MM
+	FormatTime, var_y , , yyyy
+	FormatTime, var_min , , mm
+	FormatTime, var_s , , ss
+	FormatTime, var_H , , HH
+	DATETIME := var_y . "/" . var_M . "/" . var_d . " - " . var_H . ":" . var_min . ":" . var_s
+	return DATETIME
+}
 GetDate()
 {
 	FormatTime, var_d , , dd
@@ -107,13 +178,7 @@ return
 
 !t::	;; time and date stamp
 
-	FormatTime, var_d , , dd
-	FormatTime, var_M , , MM
-	FormatTime, var_y , , yy
-	FormatTime, var_min , , mm
-	FormatTime, var_s , , ss
-	FormatTime, var_H , , HH
-	DATETIME := var_y . var_M . var_d . var_H . var_min . var_s
+	DATETIME:= getDateTime()
 	SendMode Input
 	send %DATETIME%
 	SendMode Event
@@ -193,10 +258,24 @@ FileNameFromTitle(winTitle)
 !p:: ; Full page PDF in Chrome
 
 FullPageScreenShot:
+	link := GetWeblink()
+	ToolTip, Downloading %link%, A_ScreenWidth //3, A_ScreenHeight //2
+
+	datetime:= GetDateTime()
    folderPath = C:\Users\%A_UserName%\MyWebPages
    IfNotExist, %folderPath%
    {
       FileCreateDir, %folderPath%
+   }
+   failedList = %folderPath%\failedDownloads.txt
+   IfNotExist, %failedList%
+   {
+		FileAppend, Websites that failed to download:`n, %failedList%
+   }
+   succededList = %folderPath%\succededDownloads.txt
+   IfNotExist, %succededList%
+   {
+		FileAppend, Websites that successeded to download:`n, %succededList%
    }
   
    ; Check if we are running chrome
@@ -230,16 +309,16 @@ FullPageScreenShot:
    Sendinput {Shift Up}
    Sleep 100
    WinWaitActive, Screen Capture Result, ,30,
-   Sleep 3000
-   IfWinNotActive, Screen Capture Result,
-   {
-	  Send {F5}			;default key to reload in chrome
-      Sleep 30000
-	  IfWinNotActive, Screen Capture Result,
-	  {
-		Goto, CaptureScreen
-	  }
-   }
+   Sleep 5000
+	IfWinNotActive, Screen Capture Result,
+	{
+		; Goto, CaptureScreen
+		FileAppend, %datetime%, %failedList%
+		FileAppend, %A_Tab%, %failedList%
+		FileAppend, %link%`n, %failedList%
+		Tooltip
+		return
+	}
    Sleep 300
    ClickDownloadPdf:
    Sleep 300
@@ -275,10 +354,14 @@ FullPageScreenShot:
    Sleep 300
    SendInput {Ctrl Up}
    Sleep 1000
-   Clipboard = %folderPath%\%fileCount%_%fileName%.pdf
+	FileAppend, %datetime%, %succededList%
+	FileAppend, %A_Tab%, %succededList%
+	FileAppend, %link%`n, %succededList%
+	Clipboard = %folderPath%\%fileCount%_%fileName%.pdf
+	Tooltip
 return
 
-RunCmd(cmd)		;executes javascript in url bar
+RunCmd(cmd)		;executes command in Run window
 {
    send {LWin Down}r{LWin Up}
    sleep 500
@@ -308,26 +391,60 @@ RunJavaScript(inlineScript)		;executes javascript in url bar
 }
 
 
-!i::  ; Educative.io Download A Course by iterating over all lessons
-   Loop, 500
-   {
-      WinGetTitle, prevWinTitle, A
-      ;MsgBox, %prevWinTitle%
-      GoSub, FullPageScreenShot
-      ;MsgBox, %prevWinTitle%
-      Sleep 1000
-      inlineScript = document.getElementById("next_lesson").focus()
-      RunJavaScript(inlineScript) ; focus button
-      Send {Enter} ; Click button
-      Sleep 15000
-      WinGetTitle, winTitle, A
-      if(prevWinTitle == winTitle) ; Button not found or didn't do anything. Exit
-      {
-   	 MsgBox, Download completed
-   	 return     
-      }
-   }
-   return
+!i:: ; Read links.txt and PDF print all the pages
+	FileSelectFile, LinksFile, 3, , Open file contains links, Text Documents (*.txt)
+	if (LinksFile = "")
+	{
+		MsgBox, No valid file selected. 
+		return
+	}
+	else
+	{
+		FileRead, links, %LinksFile%
+		Loop, Parse, links, `n, `r ; line by line
+		{
+			link:= A_LoopField
+			SetTitleMatchMode, 2
+			WinActivate, ahk_exe chrome.exe
+			Send ^t
+			WinWaitActive, New Tab
+			sendMode Event
+			send %link%
+			sleep 100
+			send {enter}
+			sleep 100
+			while (A_Cursor = "AppStarting")
+				continue
+			sleep 100
+         GoSub, FullPageScreenShot
+			sleep 100
+			Send ^w
+		}
+	}
+	return
+
+
+
+; !i::  ; Educative.io Download A Course by iterating over all lessons
+;    Loop, 500
+;    {
+;       WinGetTitle, prevWinTitle, A
+;       ;MsgBox, %prevWinTitle%
+;       GoSub, FullPageScreenShot
+;       ;MsgBox, %prevWinTitle%
+;       Sleep 1000
+;       inlineScript = document.getElementById("next_lesson").focus()
+;       RunJavaScript(inlineScript) ; focus button
+;       Send {Enter} ; Click button
+;       Sleep 15000
+;       WinGetTitle, winTitle, A
+;       if(prevWinTitle == winTitle) ; Button not found or didn't do anything. Exit
+;       {
+;    	 MsgBox, Download completed
+;    	 return     
+;       }
+;    }
+;    return
 
 
 !l:: ;keep screen unlocked by dancing the mouse
