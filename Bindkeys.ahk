@@ -416,13 +416,121 @@ RunJavaScript(inlineScript)		;executes javascript in url bar
 			while (A_Cursor = "AppStarting")
 				continue
 			sleep 100
-         GoSub, FullPageScreenShot
-			sleep 100
+         ; GoSub, FullPageScreenShot
+			send {ALTDOWN}{CTRLDOWN}e{CTRLUP}{ALTUP}
+			Sleep 2000
+			send {Enter} ; Click button
+			sleep 2000
+			send {Esc} ; Click button
+			sleep 1000
 			Send ^w
 		}
 	}
 	return
 
+
+^e::  ; Encrypt clipboard simply
+	stringcasesense, on
+	; a-z
+	StringReplace, clipboard, clipboard,  a, __##__, All
+	Loop, 25
+	{
+		Asc_ := Asc("a") + A_Index 
+		Ch := Chr(Asc_)
+		Ch_1 := Chr(Asc_-1)
+		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
+	}
+	StringReplace, clipboard, clipboard,  __##__, z, All
+
+	; A-Z
+	StringReplace, clipboard, clipboard,  A, __##__, All
+	Loop, 25
+	{
+		Asc_ := Asc("A") + A_Index 
+		Ch := Chr(Asc_)
+		Ch_1 := Chr(Asc_-1)
+		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
+	}
+	StringReplace, clipboard, clipboard,  __##__, Z, All
+
+	; 0-9
+	StringReplace, clipboard, clipboard,  0, __##__, All
+	Loop, 9
+	{
+		Asc_ := Asc("0") + A_Index 
+		Ch := Chr(Asc_)
+		Ch_1 := Chr(Asc_-1)
+		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
+	}
+	StringReplace, clipboard, clipboard,  __##__, 9, All
+	stringcasesense, off
+
+	return
+^#e::  ; Decrypt clipboard simply
+
+	stringcasesense, on
+	; a-z
+	StringReplace, clipboard, clipboard,  z, __##__, All
+	Loop, 25
+	{
+		Asc_ := Asc("z") - A_Index 
+		Ch := Chr(Asc_)
+		Ch_1 := Chr(Asc_+1)
+		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
+	}
+	StringReplace, clipboard, clipboard,  __##__, a, All
+
+	; A-Z
+	StringReplace, clipboard, clipboard,  Z, __##__, All
+	Loop, 25
+	{
+		Asc_ := Asc("Z") - A_Index 
+		Ch := Chr(Asc_)
+		Ch_1 := Chr(Asc_+1)
+		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
+	}
+	StringReplace, clipboard, clipboard,  __##__, A, All
+
+	; 0-9
+	StringReplace, clipboard, clipboard,  9, __##__, All
+	Loop, 9
+	{
+		Asc_ := Asc("9") - A_Index 
+		Ch := Chr(Asc_)
+		Ch_1 := Chr(Asc_+1)
+		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
+	}
+	StringReplace, clipboard, clipboard,  __##__, 0, All
+	stringcasesense, off
+	return
+
+
+
+; !e::  ; Download a blink book to evernote
+; 	InputBox, UserInput, Blink Count, Please enter blink count.
+; 	Loop, %UserInput%
+; 	{
+; 		SetTitleMatchMode, 2
+; 		WinActivate, ahk_exe chrome.exe
+; 		MouseClick, left
+; 		Sleep 5000
+; 		send {CTRLDOWN}r{CTRLUP}
+; 		Sleep 10000
+; 		send {ALTDOWN}{CTRLDOWN}e{CTRLUP}{ALTUP}
+; 		Sleep 2000
+; 		send {Enter} ; Click button
+; 		sleep 2000
+; 		send {Esc} ; Click button
+; 		sleep 1000
+; 		send {CTRLDOWN}f{CTRLUP}
+; 		sleep 1000
+; 		send next blink
+; 		send {Enter} ; Click button
+; 		send {Esc} 
+; 		send {Enter} ; Click button
+; 		sleep 1000
+; 	}
+;    return
 
 
 ; !i::  ; Educative.io Download A Course by iterating over all lessons
