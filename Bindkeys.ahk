@@ -2,59 +2,12 @@
 
 ; #-Win... !-Alt..... ^-Ctrl..... + shift
 
-; ^+a:: send report_switching_activity [get_nets 
-; ^+s:: send select_object [get_nets 
-
 
 !r:: ; Reload this script after changes
 	reload, %A_ScriptFullPath% 
 	return 
 													
 ;***************************Key Control Shortcuts*************************
-
-;  Rename XPP to PDM
-;  ^+p::
-;  send {CTRLDOWN}a{CTRLUP}
-;  send {CTRLDOWN}c{CTRLUP}
-;  StringReplace, clipboard, clipboard,  XPP, PDM, All
-;  StringReplace, clipboard, clipboard,  Xilinx Power Planner, Power Design Manager, All
-;  send {CTRLDOWN}v{CTRLUP}
-;  sleep 500
-;  send {TAB}
-;  sleep 1000
-;  send {CTRLDOWN}f{CTRLUP}
-;  sleep 1000
-;  send XPP
-;  send {TAB}
-;  sleep 1000
-;  send PDM
-;  send {TAB}
-;  sleep 100
-;  send {TAB}
-;  sleep 100
-;  send {TAB}
-;  sleep 100
-;  send {SPACE}
-;  sleep 2000
-;  send {CTRLDOWN}f{CTRLUP}
-;  sleep 1000
-;  send {BACKSPACE}{BACKSPACE}{BACKSPACE}
-;  send Xilinx Power Planner
-;  send {TAB}
-;  sleep 1000
-;  send Power Design Manager
-;  send {TAB}
-;  sleep 300
-;  send {TAB}
-;  sleep 300
-;  send {TAB}
-;  sleep 300
-;  send {TAB}
-;  sleep 300
-;  send {SPACE}
-;  sleep 1000
-;  return
-
 
 
 $*Shift:: ; Pressing shift will almost constrain mouse to a horizontal movement
@@ -109,7 +62,6 @@ return
 ;      return
 ;   return
 
-; ************ Slack Short-cuts ***************
 
 
 ;****************************Application shortcuts**************************
@@ -158,21 +110,7 @@ GetDate()
 return
 
 #d::  ;clipboard change from linux to windows path (Windows+D)
-	; Sandbox Dir
-	StringReplace, clipboard, clipboard,  /proj/cogsparusr/sandboxes/darshakk, U:, All
-	; XCO Staff
-	StringReplace, clipboard, clipboard,  /proj/xcohdstaff2/darshakk, W:, All
-	; XSJ Staff
-	StringReplace, clipboard, clipboard,  /proj/xsjhdstaff1/darshakk, Y:, All
-	;msgbox %clipboard%
-	;XCO Staff nobkup
-	StringReplace, clipboard, clipboard, /wrk/xcohdnobkup2/darshakk, T:, All
-	;XSJ Staff nobkup
-	StringReplace, clipboard, clipboard, /wrk/xsjhdnobkup1/darshakk, Q:, All
-	; XCO Dese Dir
 	StringReplace, clipboard, clipboard, /wrk/dese1/darshakk, S:, All
-	StringReplace, clipboard, clipboard, /proj/dese/users/darshakk, S:, All
-
 	StringReplace, clipboard, clipboard, /, \, All
 return
 
@@ -466,71 +404,7 @@ RunJavaScript(inlineScript)		;executes javascript in url bar
 	stringcasesense, off
 
 	return
-^#e::  ; Decrypt clipboard simply
 
-	stringcasesense, on
-	; a-z
-	StringReplace, clipboard, clipboard,  z, __##__, All
-	Loop, 25
-	{
-		Asc_ := Asc("z") - A_Index 
-		Ch := Chr(Asc_)
-		Ch_1 := Chr(Asc_+1)
-		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
-	}
-	StringReplace, clipboard, clipboard,  __##__, a, All
-
-	; A-Z
-	StringReplace, clipboard, clipboard,  Z, __##__, All
-	Loop, 25
-	{
-		Asc_ := Asc("Z") - A_Index 
-		Ch := Chr(Asc_)
-		Ch_1 := Chr(Asc_+1)
-		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
-	}
-	StringReplace, clipboard, clipboard,  __##__, A, All
-
-	; 0-9
-	StringReplace, clipboard, clipboard,  9, __##__, All
-	Loop, 9
-	{
-		Asc_ := Asc("9") - A_Index 
-		Ch := Chr(Asc_)
-		Ch_1 := Chr(Asc_+1)
-		StringReplace, clipboard, clipboard,  %Ch%, %Ch_1%, All
-	}
-	StringReplace, clipboard, clipboard,  __##__, 0, All
-	stringcasesense, off
-	return
-
-
-
-; !e::  ; Download a blink book to evernote
-; 	InputBox, UserInput, Blink Count, Please enter blink count.
-; 	Loop, %UserInput%
-; 	{
-; 		SetTitleMatchMode, 2
-; 		WinActivate, ahk_exe chrome.exe
-; 		MouseClick, left
-; 		Sleep 5000
-; 		send {CTRLDOWN}r{CTRLUP}
-; 		Sleep 10000
-; 		send {ALTDOWN}{CTRLDOWN}e{CTRLUP}{ALTUP}
-; 		Sleep 2000
-; 		send {Enter} ; Click button
-; 		sleep 2000
-; 		send {Esc} ; Click button
-; 		sleep 1000
-; 		send {CTRLDOWN}f{CTRLUP}
-; 		sleep 1000
-; 		send next blink
-; 		send {Enter} ; Click button
-; 		send {Esc} 
-; 		send {Enter} ; Click button
-; 		sleep 1000
-; 	}
-;    return
 
 
 ; !i::  ; Educative.io Download A Course by iterating over all lessons
